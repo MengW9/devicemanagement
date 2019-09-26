@@ -4,10 +4,7 @@ package com.meng.device.config.restful;
  * <pre>
  *    Http接口结果返回的对象
  * </pre>
- * Created by sirius on 2018/9/21.
  *
- * @author sirius
- * @since 1.0
  */
 public class Result {
     private Integer status;

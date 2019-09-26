@@ -4,10 +4,7 @@ package com.meng.device.config.restful;
  * <pre>
  *   http接口返回的状态码标识
  * </pre>
- * Created by sirius on 2018/9/21.
  *
- * @author sirius
- * @since 1.0
  */
 public enum ResultCode {
     CODE_200(200, 200, "success"),

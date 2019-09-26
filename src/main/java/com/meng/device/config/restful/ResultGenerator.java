@@ -9,10 +9,7 @@ import java.util.Map;
  * <pre>
  *   http接口返回结果构造器
  * </pre>
- * Created by sirius on 2018/9/21.
  *
- * @author sirius
- * @since 1.0
  */
 public class ResultGenerator {
 
