@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备列表</title>
+</head>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://unpkg.com/dayjs"></script>
+<body>
+<a href="adddevice.html">新增设备</a>
+<h2>设备列表</h2>
+<hr>
+<table border="1px">
+    <thead>
+    <tr>
+        <th>设备序号</th>
+        <th>设备名称</th>
+        <th>设备生产日期</th>
+        <th>设备维护人性别</th>
+        <th>设备价格</th>
+        <th>设备类别</th>
+    </tr>
+    </thead>
+    <tbody id="info">
+
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $.get("api/v1/sbinfo/selectSbinfo",
+            function (data) {
+                data = data.data;
+                console.log(data.length);
+                var tb = '';
+                for (var i = 0; i < data.length; i++) {
+                    // var date =date.format('yyyy年MM月dd日 HH时mm分ss秒',{data:[i].sbscrq});
+                    tb = tb + '<tr><td name=filename>' + data[i].id + '</td>'
+                        + '<td name=sbname>' + data[i].sbname + '</td>'
+                        + '<td name=sbscrq>' + data[i].sbscrq+ '</td>'
+                        + '<td name=sbwyrxb>' + data[i].sbwyrxb + '</td>'
+                        + '<td name=sbjg>' + data[i].sbjg + '</td>'
+                        + '<td name=sblx>' + data[i].sblx + '</td>'
+                        + '</tr>';
+                    //显示table
+                }
+                $("#info").html(tb);
+                console.log(data);
+                // console.log(e.data[0].sblx);
+            }, "json")
+    });
+</script>
+</body>
+</html>

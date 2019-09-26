@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增设备页面</title>
+</head>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<body>
+<a href="viewdevice.html">设备列表</a>
+<h2>新增设备</h2>
+<hr>
+<table border="1px">
+    <tr>
+        <td>设备名称</td>
+        <td><input type="text" id="txt1"></td>
+    </tr>
+    <tr>
+        <td>设备生产日期</td>
+        <td><input type="date" id="txt2"></td>
+    </tr>
+    <tr>
+        <td>设备价格</td>
+        <td><input type="text" id="txtprice"></td>
+    </tr>
+    <tr>
+        <td>设备维护人性别</td>
+        <td><input type="radio" name="rio1" value="男">男<input type="radio" name="rio1" value="女" checked>女
+        </td>
+    </tr>
+    <tr>
+        <td>设备类别</td>
+        <td><select id="txt4">
+            <!--<option value="123">123</option>-->
+        </select></td>
+    </tr>
+    <tr>
+        <button type="button" id="btn1" onclick="btnClink()" value="">提交</button>
+    </tr>
+</table>
+<script>
+    $(document).ready(function () {
+        var cbbYear = document.getElementById("txt4");
+        $.get("api/v1/sblx/selectSblx",
+            function (e) {
+                for (var i = 0; i < e.data.length; i++) {
+                    //方法1
+                    var opt = document.createElement("option");
+                    opt.innerHTML = e.data[i].sblx;
+                    opt.value = e.data[i].sblxId;
+                    cbbYear.appendChild(opt)
+                }
+                console.log(e);
+                // console.log(e.data[0].sblx);
+            }, "json")
+    });
+
+    function btnClink() {
+        var sbname = $("#txt1").val();
+        var sbscrq = $("#txt2").val();
+        var sbjg = $("#txtprice").val();
+        var value = $("input:radio[name='rio1']:checked").val();
+        var select = $('#txt4 option:selected').val();//选中的值
+        var reg = /^[0-9]*$/;
+        if (sbname.length == 0) {
+            alert("请输入设备名称。");
+            return;
+        }
+        if (sbscrq.length == 0) {
+            alert("请输入生产日期。");
+            return;
+        }
+        if (value.length == 0) {
+            alert("请选择性别。");
+            return;
+        }
+        if (sbjg.length == 0) {
+            alert("请输入设备价格。");
+            return;
+        }
+        //校验价格必须为数字
+        if (!reg.test(sbjg)) {
+            alert("价格必须为数字。");
+            return false;
+        }
+        var number = 0;
+        console.log("value" + value);
+        $.ajax({
+            url: "api/v1/sbinfo/selectInfo",    // 提交到controller的url路径
+            type: "post",    // 提交方式
+            data: {
+                "name": sbname
+            },  // data为String类型，必须为 Key/Value 格式。
+            dataType: "json",    // 服务器端返回的数据类型
+            // 判断
+            success: function (data) {
+                number = parseInt(data.data);
+                console.log(number);
+                if (number == null || number !== 0) {
+                    alert("数据重复,请重新输入");
+                    sbname = null;
+                } else {
+                    console.log(sbname);
+                    // Ajax提交数据
+                    $.ajax({
+                        url: "api/v1/sbinfo/insertSbinfo",    // 提交到controller的url路径
+                        type: "post",    // 提交方式
+                        data: {
+                            "sbname": sbname,
+                            "sbscrq": sbscrq,
+                            "sbwyrxb": value,
+                            "sbjg": sbjg,
+                            "sblxId": select
+                        },  // data为String类型，必须为 Key/Value 格式。
+                        dataType: "json",    // 服务器端返回的数据类型
+                        success: function (data) {    // 请求成功后的回调函数，其中的参数data为controller返回的map,也就是说,@ResponseBody将返回的map转化为JSON格式的数据，然后通过data这个参数取JSON数据中的值
+                            if (data.message == "success") {
+                                //跳转到系统首页
+                                alert("添加成功");
+                                location.href = '/viewdevice.html'
+                            } else {
+                                alert("添加失败");
+                                location.href = '/adddevice.html'
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+        // console.log(number);
+        /*
+        console.log(sbname);
+        console.log(sbscrq);
+        console.log(value);
+        console.log(sbjg);
+        console.log(select);*/
+        // Ajax提交数据
+        /*$.ajax({
+            url: "api/v1/sbinfo/insertSbinfo",    // 提交到controller的url路径
+            type: "post",    // 提交方式
+            data: {
+                "sbname": sbname,
+                "sbscrq": sbscrq,
+                "sbwyrxb": value,
+                "sbjg": sbjg,
+                "sblxId": select
+            },  // data为String类型，必须为 Key/Value 格式。
+            dataType: "json",    // 服务器端返回的数据类型
+            success: function (data) {    // 请求成功后的回调函数，其中的参数data为controller返回的map,也就是说,@ResponseBody将返回的map转化为JSON格式的数据，然后通过data这个参数取JSON数据中的值
+                if (data.message == "success") {
+                    //跳转到系统首页
+                    alert("添加成功");
+                    location.href = '/viewdevice.html'
+                } else {
+                    alert("添加失败");
+                    location.href = '/adddevice.html'
+                }
+            }
+        });*/
+    }
+
+
+</script>
+</body>
+</html>
