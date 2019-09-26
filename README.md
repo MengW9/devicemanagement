@@ -1,4 +1,4 @@
-# 简单设备管理系统
+# 设备管理系统
 
 spring boot+mybatis+restful
 ------
