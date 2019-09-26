@@ -2,7 +2,6 @@
 ### IntelliJ IDEA ###
 .idea
 target
-.idea
 *.iws
 *.iml
 *.ipr
